@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-# Pull upstream pstack, rebuild the Claude Code plugin, and validate it.
+# Move the upstream submodule to the latest cursor/plugins main, rebuild the plugin, and validate it.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
-upstream="${PSTACK_UPSTREAM:-$HOME/repos/pstack}"
 
-git -C "$upstream" pull --ff-only --quiet
-echo "upstream at $(git -C "$upstream" log -1 --format='%h %s')"
-python3 -I "$here/port.py" "$upstream/pstack"
+git -C "$here" submodule update --init --remote --quiet upstream
+echo "upstream at $(git -C "$here/upstream" log -1 --format='%h %s')"
+python3 -I "$here/port.py"
 claude plugin validate "$here/plugin"
-git -C "$here" status --short -- plugin | head -20
+git -C "$here" status --short -- upstream plugin | head -20

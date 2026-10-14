@@ -1,6 +1,6 @@
 # pstack for Claude Code
 
-A port of six skills from [pstack](https://github.com/cursor/plugins/tree/main/pstack), a Cursor plugin by Lauren Tan, to a Claude Code plugin. The upstream checkout stays untouched, so it updates with `git pull`. A script rebuilds the plugin from it.
+A port of six skills from [pstack](https://github.com/cursor/plugins/tree/main/pstack), a Cursor plugin by Lauren Tan, to a Claude Code plugin. Upstream is a git submodule that is never edited. A script moves it to the latest upstream commit and rebuilds the plugin from it.
 
 | Skill | What it does |
 | --- | --- |
@@ -16,11 +16,11 @@ All six run only when you type the slash command.
 ## Layout
 
 ```
-~/repos/pstack                  sparse clone of cursor/plugins, pstack/ only. Never edit it.
 ~/repos/pstack-claude
-  port.py                       builds plugin/ from the clone
+  upstream/                     submodule of cursor/plugins, pinned to the synced commit. Never edit it.
+  port.py                       builds plugin/ from the submodule
   adapter.md                    note added to each SKILL.md mapping Cursor terms to Claude Code
-  sync.sh                       pull, rebuild, validate
+  sync.sh                       update the submodule, rebuild, validate
   plugin/                       generated plugin, committed so each sync shows upstream changes as a diff
 ~/.claude/skills/pstack         symlink to plugin/, loaded as pstack@skills-dir
 ```
@@ -30,7 +30,7 @@ All six run only when you type the slash command.
 ```bash
 ~/repos/pstack-claude/sync.sh
 git -C ~/repos/pstack-claude diff -- plugin    # read what upstream changed
-git -C ~/repos/pstack-claude commit -am "Sync pstack <version>"
+git -C ~/repos/pstack-claude commit -am "Sync pstack <version>"   # also records the new upstream commit
 ```
 
 Changes load in the next Claude Code session.
@@ -44,9 +44,10 @@ Add its folder name to `SKILLS` in `port.py` and run `sync.sh`. Then check its t
 ## Set up on a new machine
 
 ```bash
-git clone --filter=blob:none --sparse https://github.com/cursor/plugins.git ~/repos/pstack
-git -C ~/repos/pstack sparse-checkout set pstack
+git clone --recurse-submodules https://github.com/christophercuongkim/pstack-claude.git ~/repos/pstack-claude
 ln -s ~/repos/pstack-claude/plugin ~/.claude/skills/pstack
 ```
 
-pstack is MIT licensed. Its license ships in `plugin/LICENSE`.
+The plugin works without the submodule, since `plugin/` is committed. Skip `--recurse-submodules` if you only want to use the skills, not sync them.
+
+The port scripts are MIT licensed, see `LICENSE`. pstack is MIT licensed too, and its license ships in `plugin/LICENSE`.

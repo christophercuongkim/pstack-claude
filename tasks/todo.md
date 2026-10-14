@@ -1,6 +1,6 @@
 # Port pstack skills to Claude Code
 
-- [x] Sparse-clone cursor/plugins (pstack/ only) to ~/repos/pstack over HTTPS, read-only
+- [x] Track cursor/plugins as the `upstream` submodule, never edited
 - [x] Port script with an allowlist of six skills, path rewrites, and an adapter note per SKILL.md
 - [x] Rename skills to their folder names so Claude Code accepts them
 - [x] Sync script: pull, rebuild, `claude plugin validate`

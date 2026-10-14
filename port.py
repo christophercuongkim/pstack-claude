@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build a Claude Code plugin in ./plugin from an upstream pstack checkout.
 
-Usage: port.py [path/to/cursor-plugins/pstack]
+Usage: port.py [path/to/cursor-plugins/pstack]  (default: ./upstream/pstack)
 """
 import json
 import re
@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-UPSTREAM = Path(sys.argv[1]) if len(sys.argv) > 1 else Path.home() / "repos/pstack/pstack"
+UPSTREAM = Path(sys.argv[1]) if len(sys.argv) > 1 else HERE / "upstream/pstack"
 OUT = HERE / "plugin"
 ADAPTER = (HERE / "adapter.md").read_text()
 
