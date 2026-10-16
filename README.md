@@ -11,7 +11,7 @@ A port of six skills from [pstack](https://github.com/cursor/plugins/tree/main/p
 | `/pstack:recall` | Rebuilds where you left off from chat history and live git and PR state. |
 | `/pstack:in-your-own-words` | Restates your goal before any work starts. |
 
-All six run only when you type the slash command.
+`blast-radius` and `recall` can also be called by the model on its own. The other four run only when you type the slash command. `MODEL_INVOCABLE` in `port.py` sets which skills are which.
 
 ## Layout
 
