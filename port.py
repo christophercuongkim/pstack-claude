@@ -24,6 +24,10 @@ SKILLS = [
     "recall",
 ]
 
+# Upstream marks every skill disable-model-invocation, which hides it from the model.
+# These ones the model may also call on its own (chris-mode runs them unprompted).
+MODEL_INVOCABLE = {"blast-radius", "recall"}
+
 # Exact one-to-one equivalents. adapter.md covers the terms that need judgment.
 REWRITES = [(".cursor/skills/", ".claude/skills/")]
 REGEX_REWRITES = [(re.compile(r"\bAskQuestion\b"), "AskUserQuestion")]
@@ -43,6 +47,8 @@ def port_markdown(text: str, skill_name: str | None) -> str:
         if skill_name:
             # Claude Code needs the kebab-case folder name, not a display name.
             meta = re.sub(r"(?m)^name:.*$", f"name: {skill_name}", meta)
+            if skill_name in MODEL_INVOCABLE:
+                meta = re.sub(r"(?m)^disable-model-invocation:.*\n?", "", meta).rstrip("\n")
         front, body = f"---\n{meta}\n---\n", text[m.end():]
 
     if skill_name:
